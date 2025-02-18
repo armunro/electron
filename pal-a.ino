@@ -48,19 +48,21 @@ void loop() {
   char key = keypad.getKey();
   if (key) {
     Serial.println(key);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Key Pressed:");
+    lcd.setCursor(0, 1);
+    lcd.print(key);
   }
-  lcd.setCursor(0,1);             // Move the cursor to row 1, column 0
-  lcd.print("Counter:");          // The count is displayed every second
-  lcd.print(millis() / 1000);
-  delay(1000);
-	for (int j = 0; j < 4; j++) {
-		for (int i = 0; i < LEDS_COUNT; i++) {
-			strip.setLedColorData(i, m_color[j][0], m_color[j][1], m_color[j][2]);// Set color data.
-			strip.show();   // Send color data to LED, and display.
-			delay(delayval);// Interval time of each LED.
-		}
-		delay(200);       // Interval time of each group of colors.
-	}
+ //  delay(1000);
+	// for (int j = 0; j < 4; j++) {
+	// 	for (int i = 0; i < LEDS_COUNT; i++) {
+	// 		strip.setLedColorData(i, m_color[j][0], m_color[j][1], m_color[j][2]);// Set color data.
+	// 		strip.show();   // Send color data to LED, and display.
+	// 		delay(delayval);// Interval time of each LED.
+	// 	}
+	// 	delay(200);       // Interval time of each group of colors.
+	// }
 }
 
 bool i2CAddrTest(uint8_t addr) {
