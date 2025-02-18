@@ -1,37 +1,38 @@
 #include <Key.h>
 #include <Keypad.h>
-
-/**********************************************************************
-  Filename    : NeoPixel
-  Description : Basic usage of LEDPixel, 
-                Make the strip light up in different colors gradually.
-  Auther      : www.freenove.com
-  Modification: 2023/06/15
-**********************************************************************/
 #include "Freenove_WS2812_Lib_for_ESP32.h"
-
-#define LEDS_COUNT  1   // The number of led
-#define LEDS_PIN	  16  // define the pin connected to the led strip
-#define CHANNEL		  0   // RMT module channel
-
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 
-#define SDA 13                    //Define SDA pins
-#define SCL 14                    //Define SCL pins
-
-LiquidCrystal_I2C lcd(0x27,16,2); 
-
-
-
-//LED lights
-
+//Nanopixel
+#define LEDS_COUNT  1   // The number of led
+#define LEDS_PIN	  16  // define the pin connected to the led strip
+#define CHANNEL		  0   // RMT module channel
 Freenove_ESP32_WS2812 strip = Freenove_ESP32_WS2812(LEDS_COUNT, LEDS_PIN, CHANNEL, TYPE_GRB);
-
 int m_color[5][3] = { {255, 0, 255}, {255, 0, 255}, {255, 0, 0}, {255, 255, 255} };
 int delayval = 500;
 
+//LCD
+#define SDA 13                    //Define SDA pins
+#define SCL 14                    //Define SCL pins
+LiquidCrystal_I2C lcd(0x27,16,2); 
+
+//Keypad
+#define ROW_NUM 4
+#define COLUMN_NUM 4
+char keys[ROW_NUM][COLUMN_NUM] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+byte rowPins[ROW_NUM] = {19, 18, 5, 17};
+byte colPins[COLUMN_NUM] = {16, 4, 0, 2};
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROW_NUM, COLUMN_NUM);
+
+
 void setup() {
+  Serial.begin(9600);
   Wire.begin(SDA, SCL);           // attach the IIC pin
   if (!i2CAddrTest(0x27)) {
     lcd = LiquidCrystal_I2C(0x3F, 16, 2);
@@ -44,6 +45,10 @@ void setup() {
 	strip.setBrightness(10);	
 }
 void loop() {
+  char key = keypad.getKey();
+  if (key) {
+    Serial.println(key);
+  }
   lcd.setCursor(0,1);             // Move the cursor to row 1, column 0
   lcd.print("Counter:");          // The count is displayed every second
   lcd.print(millis() / 1000);
