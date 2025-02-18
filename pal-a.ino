@@ -27,7 +27,7 @@ char keys[ROW_NUM][COLUMN_NUM] = {
   {'*', '0', '#', 'D'}
 };
 byte rowPins[ROW_NUM] = {19, 18, 5, 17};
-byte colPins[COLUMN_NUM] = {16, 4, 0, 2};
+byte colPins[COLUMN_NUM] = {23, 4, 0, 2}
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROW_NUM, COLUMN_NUM);
 
 
